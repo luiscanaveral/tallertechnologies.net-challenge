@@ -1,5 +1,7 @@
 version: "3"
 
+dotenv: ['.env']
+
 vars:
   PYTHON: "python3"
   VENV: ".venv"
@@ -15,6 +17,10 @@ tasks:
       - pyproject.toml
     generates:
       - '{{.VENV}}'
+  install:
+    desc: "Install dependencies"
+    cmds:
+      - '{{.VENV}}/bin/pip install -e .[dev]'
 
   lint:
     desc: "Run Ruff linter"
@@ -40,12 +46,42 @@ tasks:
     desc: "Run the main app"
     cmds:
       - '{{.VENV}}/bin/python src/my_app/main.py'
+  run_server:
+    desc: "Run server"
+    cmds:
+      - .venv/bin/uvicorn my_app.run_server:app --reload --host 0.0.0.0 --port 8000
 
   clean:
     desc: "Clean caches and temporary files"
     cmds:
       - rm -rf .mypy_cache .pytest_cache __pycache__ */__pycache__ .ruff_cache
 
+  db:run-local:
+    desc: Start a local PostgreSQL database in a Docker container
+    cmds:
+      - |
+        docker run --name pg-task_management-local \
+          -e POSTGRES_USER=postgres \
+          -e POSTGRES_PASSWORD=mysecretpassword \
+          -e POSTGRES_DB=task_management \
+          -v $(pwd)/db/init:/docker-entrypoint-initdb.d \
+          -p 5432:5432 \
+          -d postgres
+        echo "Waiting for PostgreSQL to be ready..."
+        until docker exec pg-task_management-local pg_isready -U postgres > /dev/null 2>&1; do
+          sleep 1
+        done
+    silent: true
+  docker:destroy-database:
+  orm:generate-db-model-from-database:
+    desc: "Generate SQLAlchemy ORM models from the local PostgreSQL database schema"
+    cmds:
+      - |
+        .venv/bin/pip install sqlacodegen
+        export PG_CONN_STR=postgresql://postgres:mysecretpassword@localhost:5432/task_management
+        export PY_OUTPUT_FILE=./src/my_app/orm/_generated.py
+        .venv/bin/sqlacodegen --generator declarative $PG_CONN_STR > $PY_OUTPUT_FILE
+        printf "model creation done in: \n\t$PY_OUTPUT_FILE"
   all:
     desc: "Run lint, typecheck, tests, and format"
     cmds:
