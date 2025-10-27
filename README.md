@@ -1,3 +1,17 @@
+
+# Solution
+```
+task init
+# to run local pg database
+task db:run-local
+# to run sqlalchemist generation based on your local database
+task orm:generate-db-model-from-database
+# to run local fastapi server
+task run_server
+
+```
+
+
 problem:
 
 ```

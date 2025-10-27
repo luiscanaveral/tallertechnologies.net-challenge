@@ -72,7 +72,6 @@ tasks:
           sleep 1
         done
     silent: true
-  docker:destroy-database:
   orm:generate-db-model-from-database:
     desc: "Generate SQLAlchemy ORM models from the local PostgreSQL database schema"
     cmds:
