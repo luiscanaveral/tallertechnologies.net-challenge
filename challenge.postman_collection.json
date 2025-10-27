@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "5bb63206-f824-447c-bd70-f7a36b8a440a",
+		"name": "challenge",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19858748",
+		"_collection_link": "https://blue-desert-607399.postman.co/workspace/ihm_core~37b3a36f-a893-42b1-a3e7-f9c04c839c66/collection/19858748-5bb63206-f824-447c-bd70-f7a36b8a440a?action=share&source=collection_link&creator=19858748"
+	},
+	"item": [
+		{
+			"name": "project 1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://0.0.0.0:8000/project/1",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8000",
+					"path": [
+						"project",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create task",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\":\"nolose\",\n    \"priority\":1,\n    \"project_id\":1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://0.0.0.0:8000/project/1/tasks",
+					"protocol": "http",
+					"host": [
+						"0",
+						"0",
+						"0",
+						"0"
+					],
+					"port": "8000",
+					"path": [
+						"project",
+						"1",
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
