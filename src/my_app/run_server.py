@@ -19,6 +19,7 @@ def read_root():
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
+
 @app.get("/projects")
 def _(service: ProjectsServiceDI):
     return service.get_all_projects()
@@ -31,15 +32,19 @@ def project_not_found_exception_handler(request, exc: ProjectNotFoundException):
         content={"detail": str(exc)},
     )
 
+
 @app.get("/project/{project_id}")
 def _(project_id: int, service: ProjectsServiceDI):
     return service.get_project_by_id(project_id)
 
+
 @app.post("/project/{project_id}/tasks")
-def create_task(project_id: int, 
-                task: TaskCreate, 
-                project_service: ProjectsServiceDI, 
-                task_service: TaskServiceDI):
+def create_task(
+    project_id: int,
+    task: TaskCreate,
+    project_service: ProjectsServiceDI,
+    task_service: TaskServiceDI,
+):
     # Verify project exists first
     project = project_service.get_project_by_id(project_id)
     if not project:

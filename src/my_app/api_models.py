@@ -5,9 +5,12 @@ from pydantic import BaseModel, Field
 
 # ---------- Project Schemas ----------
 
+
 class ProjectBase(BaseModel):
     name: str = Field(..., example="Website Redesign")
-    description: Optional[str] = Field(None, example="Improve UX/UI and add landing pages")
+    description: Optional[str] = Field(
+        None, example="Improve UX/UI and add landing pages"
+    )
 
 
 class ProjectCreate(ProjectBase):
@@ -23,6 +26,7 @@ class ProjectRead(ProjectBase):
 
 
 # ---------- Task Schemas ----------
+
 
 class TaskBase(BaseModel):
     title: str = Field(..., example="Create wireframes")
@@ -44,6 +48,7 @@ class TaskRead(TaskBase):
 
 
 # ---------- Nested Relationships ----------
+
 
 class ProjectWithTasks(ProjectRead):
     tasks: List[TaskRead] = []
