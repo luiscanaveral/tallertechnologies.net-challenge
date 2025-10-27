@@ -3,6 +3,7 @@ from typing import Union
 from fastapi import FastAPI
 
 from .api_models import Task
+from .services import ProjectsServiceDI
 
 app = FastAPI()
 
@@ -16,6 +17,10 @@ def read_root():
 def read_item(item_id: int, q: Union[str, None] = None):
     return {"item_id": item_id, "q": q}
 
+
+@app.get("/project/{project_id}")
+def _(project_id: int, service: ProjectsServiceDI):
+    return service.get_project_by_id(project_id)
 
 @app.post("/project/{project_id}/tasks")
 def read_item(project_id: int, task: Task):
