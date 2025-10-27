@@ -1,0 +1,23 @@
+[project]
+name = "my-python-seed"
+version = "0.1.0"
+description = "Python seed project with best practices"
+authors = [{ name = "Luis Canaveral" }]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "black", "mypy", "python-dotenv", "taskipy"]
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "W", "C90"]
+ignore = ["E501"]
+
+[tool.mypy]
+strict = true

@@ -1,0 +1,55 @@
+version: "3"
+
+vars:
+  PYTHON: "python3"
+  VENV: ".venv"
+
+tasks:
+  init:
+    desc: "Create virtual environment and install dependencies"
+    cmds:
+      - '{{.PYTHON}} -m venv {{.VENV}}'
+      - '{{.VENV}}/bin/pip install -U pip'
+      - '{{.VENV}}/bin/pip install -e .[dev]'
+    sources:
+      - pyproject.toml
+    generates:
+      - '{{.VENV}}'
+
+  lint:
+    desc: "Run Ruff linter"
+    cmds:
+      - '{{.VENV}}/bin/ruff check src tests'
+
+  format:
+    desc: "Format code using Black"
+    cmds:
+      - '{{.VENV}}/bin/black src tests'
+
+  typecheck:
+    desc: "Run type checking with Mypy"
+    cmds:
+      - '{{.VENV}}/bin/mypy src'
+
+  test:
+    desc: "Run all tests"
+    cmds:
+      - '{{.VENV}}/bin/pytest -v'
+
+  run:
+    desc: "Run the main app"
+    cmds:
+      - '{{.VENV}}/bin/python src/my_app/main.py'
+
+  clean:
+    desc: "Clean caches and temporary files"
+    cmds:
+      - rm -rf .mypy_cache .pytest_cache __pycache__ */__pycache__ .ruff_cache
+
+  all:
+    desc: "Run lint, typecheck, tests, and format"
+    cmds:
+      - task: lint
+      - task: typecheck
+      - task: test
+      - task: format
